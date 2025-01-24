@@ -21,7 +21,7 @@ RUN wget https://www.python.org/ftp/python/3.11.5/Python-3.11.5.tgz && \
 ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 
 # Upgrade pip
-RUN python3.11 -m pip install --no-cache-dir --upgrade pip
+RUN python3 -m pip install --no-cache-dir --upgrade pip
 
 # Set Python as default
 RUN ln -sf /usr/local/bin/python3.11 /usr/bin/python3 && \
