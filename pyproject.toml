@@ -24,7 +24,7 @@ dev = [
 [tool.setuptools]
 package-dir = {"" = "src"}
 packages = ["pycli"]
-package-data = { "pycli" = ["py.typed"] }
+package-data = { "pycli" = ["py.typed", "resources/*"] }
 
 [tool.mypy]
 files = ["src"]

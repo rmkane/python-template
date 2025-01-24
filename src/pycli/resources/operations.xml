@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<operations>
+    <operation label="ADD" symbol="+" />
+    <operation label="SUB" symbol="-" />
+    <operation label="MUL" symbol="*" />
+    <operation label="DIV" symbol="/" />
+</operations>

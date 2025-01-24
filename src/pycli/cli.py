@@ -2,10 +2,47 @@
 
 import logging
 import os
+import xml.etree.ElementTree as ET
 from argparse import ArgumentParser, Namespace
 from datetime import datetime
+from importlib.abc import Traversable
+from importlib.resources import files
+from pathlib import Path
 
 from pycli.utils.math import add_numbers, div_numbers, mul_numbers, sub_numbers
+
+resources_dir: Traversable = files("pycli.resources")
+
+
+def get_resource_path(name: str) -> Path:
+    resource: Traversable = resources_dir / name
+    if resource.is_file():
+        return Path(os.fspath(str(resource)))
+    else:
+        raise ValueError(f"The resource {resource} cannot be represented as a Path.")
+
+
+def load_resource(name: str) -> str:
+    with get_resource_path(name).open("r", encoding="utf-8") as f:
+        return f.read()
+    raise ValueError(f"Resource could not be found: {name}")
+
+
+def parse_operation(element: ET.Element) -> tuple[str, str]:
+    label = element.get("label")
+    symbol = element.get("symbol")
+    if label is None or symbol is None:
+        raise ValueError("operation label or symbol is undefined")
+    return label, symbol
+
+
+def load_operations() -> dict[str, str]:
+    xml = ET.parse(get_resource_path("operations.xml"))
+    ops = (parse_operation(op) for op in xml.getroot().findall("operation"))
+    return {k: v for k, v in ops}
+
+
+operations = load_operations()
 
 
 class AddCommand(Namespace):
@@ -109,6 +146,7 @@ def main() -> None:
 
     if hasattr(args, "func"):
         init_logging()
+        logger.info(f"Operations: {operations}")
         args.func(args)
     else:
         parser.print_help()
