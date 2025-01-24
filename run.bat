@@ -99,7 +99,7 @@ if "%1" == "clean-all" (
 )
 
 :: Activate the virtual environment
-if "%1" == "venv" (
+if "%1" == "activate" (
     echo To activate the virtual environment, run:
     echo %VENV_ACTIVATE%
     goto :eof

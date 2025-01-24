@@ -6,13 +6,16 @@ TEST_DIR = tests
 TARGET_DIRS = build dist $(APP_NAME).egg-info
 CACHE_DIRS = .pytest_cache .mypy_cache
 
-.PHONY: help setup develop install uninstall build test format lint clean clean-all venv deactivate
+.PHONY: help
+.PHONY: setup develop install uninstall build
+.PHONY: test format lint clean clean-all
+.PHONY: venv deactivate
 
 help: # Show this help message
 	@awk 'BEGIN {FS = ":.*?#"} /^[a-zA-Z_-]+:.*?#/ {printf "\033[36m%-15s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 setup: # Create virtual environment and install pip and build
-	python -m venv $(VENV_DIR)
+	python3 -m venv $(VENV_DIR)
 	$(ACTIVATE_CMD) && pip install --upgrade pip build
 
 develop: # Install development dependencies
@@ -41,12 +44,8 @@ lint: # Lint the code
 
 clean: # Clean all generated files
 	@echo Cleaning all generated files...
-	@for dir in $(TARGET_DIRS); do \
-		rm -rf $$dir; \
-	done
-	@for dir in $(CACHE_DIRS); do \
-		rm -rf $$dir; \
-	done
+	@rm -rf $(TARGET_DIRS)
+	@rm -rf $(CACHE_DIRS)
 	@find $(SRC_DIR) -type d -name "__pycache__" -exec rm -rf {} +
 
 clean-all: clean # Clean the project and remove the virtual environment
@@ -55,7 +54,7 @@ clean-all: clean # Clean the project and remove the virtual environment
 	@echo Cleaning the virtual environment...
 	@rm -rf $(VENV_DIR)
 
-venv: # Show how to activate the virtual environment
+activate: # Show how to activate the virtual environment
 	@echo To activate the virtual environment, run:
 	@echo $(ACTIVATE_CMD)
 
