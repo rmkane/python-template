@@ -1,0 +1,19 @@
+# Virtual Environments
+.venv/
+
+# Python Bytecode Files
+*.py[cod]
+__pycache__/
+
+# Distribution / Packaging
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Logs
+logs/
+
+# Caches
+.mypy_cache/
+.pytest_cache/
