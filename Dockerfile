@@ -1,0 +1,29 @@
+# Use an official Python runtime as a parent image
+FROM python:3.11-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Install build-essential and other necessary packages
+RUN apt-get update && apt-get install -y build-essential && rm -rf /var/lib/apt/lists/*
+
+# Copy the entrypoint script, Makefile, and pyproject.toml
+COPY entrypoint.sh ./
+COPY Makefile ./
+COPY pyproject.toml ./
+
+# Install pip and any needed packages specified in pyproject.toml
+RUN pip install --upgrade pip
+
+# Copy the rest of the application code
+COPY src/ ./src/
+COPY tests/ ./tests/
+
+# Install the package in editable mode with development dependencies
+RUN pip install -e .[dev]
+
+# Make port 8000 available to the world outside this container
+EXPOSE 8000
+
+# Run the application
+ENTRYPOINT ["./entrypoint.sh"]
