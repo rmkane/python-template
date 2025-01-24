@@ -17,6 +17,7 @@ dev = [
     "black",
     "isort",
     "mypy",
+    "pyinstaller",
     "pytest"
 ]
 

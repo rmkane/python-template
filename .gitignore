@@ -17,3 +17,6 @@ logs/
 # Caches
 .mypy_cache/
 .pytest_cache/
+
+# PyInstaller
+*.spec

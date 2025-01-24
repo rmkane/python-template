@@ -10,8 +10,8 @@ set VENV_DEACTIVATE=%VENV_DIR%\Scripts\deactivate
 set SRC_DIR=src
 set TEST_DIR=tests
 
-set TARGET_DIRS="build dist %APP_NAME%.egg-info"
-set CACHE_DIRS=".pytest_cache .mypy_cache"
+set TARGET_DIRS=build dist %APP_NAME%.egg-info
+set CACHE_DIRS=.pytest_cache .mypy_cache
 
 :: Create virtual environment
 if "%1" == "setup" (
@@ -46,6 +46,7 @@ if "%1" == "uninstall" (
 if "%1" == "build" (
     call %VENV_ACTIVATE%
     python -m build
+    python -m PyInstaller --name %APP_NAME% %SRC_DIR%\%APP_NAME%\cli.py
     goto :eof
 )
 
@@ -81,7 +82,7 @@ if "%1" == "clean" (
     for %%d in (%CACHE_DIRS%) do (
         rmdir /s /q %%d 2>nul
     )
-    for /d /r . %%d in (__pycache__) do (
+    for /d /r %SRC_DIR% %%d in (__pycache__) do (
         @if exist "%%d" rmdir /s /q "%%d" 2>nul
     )
     goto :eof
