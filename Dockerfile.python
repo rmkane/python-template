@@ -1,0 +1,31 @@
+# Use Rocky Linux 8 as the base image
+FROM rockylinux:8
+
+# Install necessary tools for building Python from source
+RUN dnf install -y gcc gcc-c++ make wget libffi-devel bzip2-devel \
+    xz-devel zlib-devel gdbm-devel ncurses-devel readline-devel \
+    sqlite-devel openssl-devel tk-devel libuuid-devel findutils && \
+    dnf clean all
+
+# Download and build Python 3.11 with shared libraries
+RUN wget https://www.python.org/ftp/python/3.11.5/Python-3.11.5.tgz && \
+    tar xvf Python-3.11.5.tgz && \
+    cd Python-3.11.5 && \
+    ./configure --enable-optimizations --enable-shared && \
+    make -j2 && \
+    make install && \
+    cd .. && \
+    rm -rf Python-3.11.5 Python-3.11.5.tgz
+
+# Update the dynamic linker search path to include the directory with libpython3.11.so.1.0
+ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+
+# Upgrade pip
+RUN python3.11 -m pip install --no-cache-dir --upgrade pip
+
+# Set Python as default
+RUN ln -sf /usr/local/bin/python3.11 /usr/bin/python3 && \
+    ln -sf /usr/local/bin/pip3.11 /usr/bin/pip3
+
+# Verify installation
+RUN python3 --version && pip3 --version

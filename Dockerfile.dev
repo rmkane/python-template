@@ -22,8 +22,5 @@ COPY tests/ ./tests/
 # Install the package in editable mode with development dependencies
 RUN pip install -e .[dev]
 
-# Make port 8000 available to the world outside this container
-EXPOSE 8000
-
 # Run the application
 ENTRYPOINT ["./entrypoint.sh"]
